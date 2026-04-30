@@ -22,20 +22,3 @@ Security Requirements:
 JWT authentication with bcrypt (cost factor 12).
 AES-256 encryption at rest for transcripts.
 Row-level security: Users only see their own data.
-
-Phase 1 Task: Foundation & Infrastructure
-Please initialize the project structure and implement the core foundation as outlined in Phase 1 of the PRD:
-
-Project Structure: Create a monorepo containing /backend, /frontend, and /ml directories.
-
-Dockerization: Provide a docker-compose.yml defining the api, db (Postgres), redis, and worker (Celery) services.
-
-Database Schema: Generate the SQLAlchemy models for User and Transcript based on the provided schema (including JSONB for speaker turns).
-
-Authentication: Implement FastAPI endpoints for /auth/register and /auth/login using JWT and bcrypt.
-
-Transcript Upload (API): Create the POST /transcripts/upload endpoint. It must handle .txt and .pdf, extract text, use a regex-based heuristic to parse speaker turns into JSON, and save the file to storage.
-
-Frontend Shell: Scaffold the React app with a basic layout, an Upload page (file picker/paste editor), and a Session List page using React Query.
-
-Deliverable: Provide the directory structure, the docker-compose.yml file, the core FastAPI backend logic, and the React upload component.

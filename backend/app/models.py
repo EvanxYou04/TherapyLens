@@ -28,7 +28,16 @@ class Transcript(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
     filename = Column(String)
     content = Column(JSON)  # JSONB for speaker turns
-    status = Column(String, default="uploaded")  # uploaded, processing, completed
+    storage_key = Column(String, nullable=True)
+    status = Column(String, default="queued")  # queued, processing, completed, failed
+    processing_task_id = Column(String, nullable=True)
+    processing_started_at = Column(DateTime, nullable=True)
+    processing_completed_at = Column(DateTime, nullable=True)
+    error_message = Column(Text, nullable=True)
+    score_summary = Column(JSON, nullable=True)
+    score_details = Column(JSON, nullable=True)
+    coaching_summary = Column(Text, nullable=True)
+    model_version = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     owner = relationship("User", back_populates="transcripts")
