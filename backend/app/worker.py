@@ -3,7 +3,7 @@ import os
 from datetime import datetime
 
 from app.models import SessionLocal, Transcript
-from app.ml_pipeline import run_pipeline
+from ml.pipeline import run_pipeline
 
 celery_app = Celery('app.worker',
                      broker=os.getenv('REDIS_URL', 'redis://localhost:6379/0'),
