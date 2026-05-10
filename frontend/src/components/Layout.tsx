@@ -20,6 +20,17 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 </Link>
               </div>
             </div>
+            <div className="flex items-center">
+              <button
+                onClick={() => {
+                  localStorage.removeItem('token');
+                  window.location.href = '/login';
+                }}
+                className="text-sm text-gray-500 hover:text-gray-700"
+              >
+                Sign out
+              </button>
+            </div>
           </div>
         </div>
       </nav>

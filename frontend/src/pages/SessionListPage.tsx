@@ -1,5 +1,13 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+
+const statusColors: Record<string, string> = {
+  queued:     'bg-yellow-100 text-yellow-800',
+  processing: 'bg-blue-100 text-blue-800',
+  completed:  'bg-green-100 text-green-800',
+  failed:     'bg-red-100 text-red-800',
+};
 
 const SessionListPage: React.FC = () => {
   const { data: sessions, isLoading } = useQuery({
@@ -13,6 +21,13 @@ const SessionListPage: React.FC = () => {
       if (!response.ok) throw new Error('Failed to fetch sessions');
       return response.json();
     },
+    refetchInterval: (query) => {
+      const sessions = query.state.data as any[] | undefined;
+      const hasActive = sessions?.some(
+        (s) => s.status === 'queued' || s.status === 'processing'
+      );
+      return hasActive ? 3000 : false;
+    },
   });
 
   if (isLoading) return <div>Loading...</div>;
@@ -24,23 +39,25 @@ const SessionListPage: React.FC = () => {
         <ul className="divide-y divide-gray-200">
           {sessions?.map((session: any) => (
             <li key={session.id}>
-              <div className="px-4 py-4 sm:px-6">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm font-medium text-indigo-600 truncate">{session.filename}</p>
-                  <div className="ml-2 flex-shrink-0 flex">
-                    <p className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                      {session.status}
-                    </p>
+              <Link to={`/sessions/${session.id}`} className="block hover:bg-gray-50">
+                <div className="px-4 py-4 sm:px-6">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-medium text-indigo-600 truncate">{session.filename}</p>
+                    <div className="ml-2 flex-shrink-0 flex">
+                      <p className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusColors[session.status] ?? 'bg-gray-100 text-gray-800'}`}>
+                        {session.status}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="mt-2 sm:flex sm:justify-between">
+                    <div className="sm:flex">
+                      <p className="flex items-center text-sm text-gray-500">
+                        Uploaded on {new Date(session.created_at).toLocaleDateString()}
+                      </p>
+                    </div>
                   </div>
                 </div>
-                <div className="mt-2 sm:flex sm:justify-between">
-                  <div className="sm:flex">
-                    <p className="flex items-center text-sm text-gray-500">
-                      Uploaded on {new Date(session.created_at).toLocaleDateString()}
-                    </p>
-                  </div>
-                </div>
-              </div>
+              </Link>
             </li>
           ))}
         </ul>
