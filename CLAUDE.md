@@ -103,6 +103,48 @@ Frontend proxies API calls to `http://localhost:8000` (configured in `package.js
 
 `Transcript` rows hold both the raw content (`content` JSON — speaker turns array) and results (`score_summary`, `score_details`, `coaching_summary`) in JSON/Text columns. Status lifecycle: `queued → processing → completed | failed`.
 
+## Git & Development Workflow
+
+### Branching
+
+- **Never commit directly to `main`.** Always branch first:
+  ```bash
+  git checkout -b <type>/<short-description>
+  ```
+- Branch type prefixes: `feat/`, `fix/`, `chore/`, `refactor/`, `test/`
+- Examples: `feat/results-dashboard`, `fix/bcrypt-compat`, `test/upload-e2e`
+
+### Commits
+
+- Keep commits atomic — one logical change per commit
+- Title format: `Type: Short description` (e.g. `Fix: Drop trailing-slash redirect in sessions fetch`)
+- Types: `Feat`, `Fix`, `Refactor`, `Test`, `Chore`, `Docs`
+
+### Pre-PR Checklist
+
+Before opening a PR, all of the following must pass:
+
+1. E2E tests green: `cd frontend && npx playwright test`
+2. No outstanding lint errors: `cd backend && flake8 app/`
+3. Branch is up to date with `main`
+
+### Pull Requests
+
+- All PRs target `main`
+- Title format: `[Type] Short description` (e.g. `[Fix] Resolve bcrypt passlib incompatibility`)
+- PR body must include:
+  - **Summary** — what changed and why
+  - **Testing** — how it was verified (E2E tests run, manual steps, etc.)
+  - **Breaking changes** — if any
+- Create with: `gh pr create --title "..." --body "..."`
+
+### Code Review (required before merge)
+
+- Run `/review` on every PR — **this is a hard gate, do not merge without it**
+- The review must confirm **no security vulnerabilities** before the PR can be merged
+- Security checks to prioritize: auth/JWT handling, SQL injection, XSS, secrets in code, insecure dependencies, CORS misconfiguration, unvalidated user input
+- Merge with squash only: `gh pr merge --squash`
+
 ## Planned Next Steps (from README)
 
 - Replace heuristic ML with RoBERTa embeddings + GPT-4o coaching
