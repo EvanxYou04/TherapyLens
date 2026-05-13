@@ -101,3 +101,10 @@ dist/
 
 # Jupyter
 .ipynb_checkpoints/
+
+# Playwright
+frontend/test-results/
+playwright-report/
+
+# Claude Code
+.claude/

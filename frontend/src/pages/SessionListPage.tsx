@@ -13,7 +13,7 @@ const SessionListPage: React.FC = () => {
   const { data: sessions, isLoading } = useQuery({
     queryKey: ['sessions'],
     queryFn: async () => {
-      const response = await fetch('/transcripts', {
+      const response = await fetch('/transcripts/', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
